@@ -22,12 +22,10 @@ class Command(BaseCommand):
 
     def get_csv_file_header(self, csvHeader):
         header_ = csvHeader
-        # cols = [x.replace(' ', '_').lower() for x in str(header_).split(",")]
-        cols = [x.replace(' ', '_').lower() for x in header_]
-        return cols
+        return [x.replace(' ', '_').lower() for x in header_]
 
     def boolean_input(self, question, default=None):
-        result = input("%s " % question)
+        result = input(f"{question} ")
         if not result and default is not None:
             return default
         while len(result) < 1 or result[0].lower() not in "yn":
@@ -40,7 +38,7 @@ class Command(BaseCommand):
         CODSUBPREF = 7
         logger.debug('csv_upload_post_save: start import_csv: Check if csv file exists')
         if not os.path.exists(csv_file):
-            raise CommandError('Feiras file "%s" does not exist' % csv_file)
+            raise CommandError(f'Feiras file "{csv_file}" does not exist')
 
         with open(csv_file, newline='', encoding='iso-8859-1') as f:
             reader = csv.reader(f)
@@ -49,10 +47,9 @@ class Command(BaseCommand):
             for line in reader:
                 logger.debug('csv_upload_post_save: line: ', line)
                 feira_obj = Feira()
-                i = 0
                 # TODO: verificar o split de linha esta errado
                 # row_item = str(line).split(',')
-                for item in line:
+                for i, item in enumerate(line):
                     key = header_cols[i]
                     if i == CODDIST:
                         distrito_obj = self.check_distrito(
@@ -69,7 +66,6 @@ class Command(BaseCommand):
                         item = subprefeitura_obj
 
                     setattr(feira_obj, key, item)
-                    i += 1
                 logger.debug('csv_upload_post_save:line: ', line)
                 feira_obj.save()
 

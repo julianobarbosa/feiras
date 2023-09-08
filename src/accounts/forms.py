@@ -20,12 +20,14 @@ class LoginForm(AuthenticationForm):
         self.helper.layout = Layout(
             Field('username', placeholder="Enter Email", autofocus=""),
             Field('password', placeholder="Enter Password"),
-            HTML('<a href="{}">Forgot Password?</a>'.format(
-                reverse("accounts:password-reset"))),
+            HTML(
+                f'<a href="{reverse("accounts:password-reset")}">Forgot Password?</a>'
+            ),
             Field('remember_me'),
-            Submit('sign_in', 'Log in',
-                   css_class="btn btn-lg btn-primary btn-block"),
-            )
+            Submit(
+                'sign_in', 'Log in', css_class="btn btn-lg btn-primary btn-block"
+            ),
+        )
 
 
 class SignupForm(authtoolsforms.UserCreationForm):

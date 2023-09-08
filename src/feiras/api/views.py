@@ -67,8 +67,7 @@ class FeiraListAPIView(ListAPIView):
 
     def get_queryset(self, *args, **kwargs):
         queryset_list = Feira.objects.all()
-        query = self.request.GET.get("q")
-        if query:
+        if query := self.request.GET.get("q"):
             # queryset_list = queryset_list.filter(
             #     Q(coddist__des_distrito__icontains=query) |
             #     Q(regiao5__icontains=query) |

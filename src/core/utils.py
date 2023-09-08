@@ -9,17 +9,13 @@ from core.models import Feira
 
 def upload_csv_file(instance, filename):
     qs = instance.__class__.objects.filter(user=instance.user)
-    if qs.exists():
-        num_ = qs.last().id + 1
-    else:
-        num_ = 1
+    num_ = qs.last().id + 1 if qs.exists() else 1
     return f'csv/{num_}/{instance.user.username}/{filename}'
 
 
 def convert_header(csvHeader):
     header_ = csvHeader[0]
-    cols = [x.replace(' ', '_').lower() for x in header_.split(",")]
-    return cols
+    return [x.replace(' ', '_').lower() for x in header_.split(",")]
 
 
 
